@@ -1,0 +1,43 @@
+input.oxDropdownTipsInput {
+    padding: 0px 8px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    line-height: 19pt;
+    font-size: 10pt;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transform: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+input.oxDropdownTipsInput:focus {
+    outline: none;
+    box-shadow: none;
+    border: 1px solid #54c1e2;
+}
+.oxDropdownTipsWrapper {
+    border: 1px solid #ddd;
+    margin-top: -1px;
+}
+a.oxDropdownTipsItem {
+    display: block;
+    padding: 6px 8px;
+    font-size: 10pt;
+    text-decoration: none;
+    color: #333;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transform: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #ddd;
+}
+a.oxDropdownTipsItem:hover {
+    background: #eee;
+}
+a.oxDropdownTipsItem:last-child{
+	border-bottom: none;
+}
