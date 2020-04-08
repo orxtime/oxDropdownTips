@@ -41,3 +41,105 @@ a.oxDropdownTipsItem:hover {
 a.oxDropdownTipsItem:last-child{
 	border-bottom: none;
 }
+.oxDropdownTipsContainer{
+	position: relative;
+}
+.oxDropdownTipsContainer.multiselect-on > div {
+    display: inline-block;
+    vertical-align: top;
+}
+span.oxDropdownTipsMultiselectTag {
+    background: #2a61a5;
+    display: inline-block;
+    height: 32px;
+    padding: 0 10px;
+    vertical-align: text-top;
+    color: #fff;
+    border-radius: 2px;
+    line-height: 32px;
+    margin-right: 4px;
+    font-size: 14px;
+}
+span.oxDropdownTipsMultiselectTagClose {
+    font-size: 24px;
+    font-weight: 100;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 5px;
+    cursor: pointer;
+    line-height: 28px;
+}
+.oxDropdownTipsContainer.multiselect-on .oxDropdownTipsInput {
+    border: none;
+    min-width: 170px;
+}
+.oxDropdownTipsContainer.multiselect-on {
+    border: 1px solid #ddd;
+    padding: 0 4px;
+}
+.oxDropdownTipsContainer.multiselect-on .oxDropdownTipsWrapper {
+    border: 1px solid #ddd;
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    left: 0;
+    top: 100%;
+    margin-top: 0;
+}
+.oxDropdownTipsItemImg, .oxDropdownTipsItemImgHolder {
+    height: 32px;
+    width: 32px;
+    border-radius: 32px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+.oxDropdownTipsItemImg > img{
+	width: 100%;
+}
+.oxDropdownTipsItemImgHolder {
+	background: #eee;
+}
+span.oxDropdownTipsItemNoResult {
+    display: block;
+    padding: 3px 10px;
+}
+.oxDropdownTipsDropdownOpenerIcon{
+	width: 16px;
+}
+.oxDropdownTipsDropdownOpener {
+    position: absolute;
+    right: 12px;
+    top: 9px;
+    cursor: pointer;
+}
+.oxDropdownTipsDropdownOpener:hover {
+	opacity: 0.5;
+	-moz-opacity: 0.5;
+	-khtml-opacity: 0.5;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+}
+span.oxDropdownTipsMultiselectTagAdd {
+    background: #cddbec;
+    display: inline-block;
+    height: 32px;
+    padding: 0 10px;
+    vertical-align: text-top;
+    color: #224269;
+    border-radius: 2px;
+    line-height: 32px;
+    margin-right: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+span.oxDropdownTipsMultiselectTagAddIcon {
+    font-size: 22px;
+    vertical-align: top;
+    margin-left: 3px;
+   	line-height: 28px;
+}
+.oxDropdownTipsMultiselectTagsContainer {
+    padding-right: 25px;
+}
