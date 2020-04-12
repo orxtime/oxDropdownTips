@@ -190,7 +190,7 @@
             if(tips_html.length > 0){
                 tips_wrapper.show();
             }else{
-                tips_html.push(`<span class="oxDropdownTipsItemNoResult">Пользователь не найден</a>`);
+                tips_html.push(`<span class="oxDropdownTipsItemNoResult">${(settings.language[settings.locale].NO_RESULTS_LABEL || 'NO_RESULTS_LABEL')}</a>`);
                 tips_wrapper.show();
             }
 
@@ -260,9 +260,8 @@
                 multiselect_tags.push(`<span class="oxDropdownTipsMultiselectTag" data-value="${selected_item.value}">${selected_item.text}<span class="oxDropdownTipsMultiselectTagClose">&times;</span></span>`);
             }
 
-            if(multiselect_tags.length > 0){
-                multiselect_tags.push(`<span class="oxDropdownTipsMultiselectTagAdd">Добавить <span class="oxDropdownTipsMultiselectTagAddIcon">+</span></span>`);
-            }
+            if(multiselect_tags.length > 0)
+                multiselect_tags.push(`<span class="oxDropdownTipsMultiselectTagAdd">${(settings.language[settings.locale].TERM_INPUT_MULTISELECT_ADD_BUTTON_LABEL || 'TERM_INPUT_MULTISELECT_ADD_BUTTON_LABEL')} <span class="oxDropdownTipsMultiselectTagAddIcon">+</span></span>`);
 
             var multiselect_tags_element = jQuery('<div class="oxDropdownTipsMultiselectTagsContainer">'+multiselect_tags.join('')+'</div>').appendTo(multiselect_wrapper[0]);
 
@@ -280,8 +279,9 @@
                 })
                 multiselect_tag.remove();
 
-                if(multiselect_tags_container.find('.oxDropdownTipsMultiselectTag').length <= 0)
-                    multiselect_tags_container.find('.oxDropdownTipsMultiselectTagAdd').remove();
+                if(multiselect_tags_container.find('.oxDropdownTipsMultiselectTag').length <= 0){
+                    multiselect_wrapper.find('.oxDropdownTipsMultiselectTagsContainer').remove();
+                }
 
                 if(typeof settings.onChange == 'function')
                     settings.onChange();
@@ -308,7 +308,8 @@
             options = {};
 
         var states = {
-            selected : []
+            selected : [],
+            requiredCheck : true
         };
 
         var settings = jQuery.extend({
@@ -321,11 +322,20 @@
             maxTipsCount:10,
             method:'GET',
             termProperty:'term',
-            termInputPlaceholder:'',
             data:{},
             highlight:false,
             multiselect:false,
             showImages:false,
+            required:false,
+            locale:'ru-RU',
+            language:{
+                'ru-RU' : {
+                    DROP_DOWN_NO_RESULTS_LABEL : 'Ничего не найдено',
+                    TERM_INPUT_PLACEHOLDER : 'Выберите значение',
+                    TERM_INPUT_REQUIRED_ERROR_MESSAGE : 'Это поле обязательно для заполнения',
+                    TERM_INPUT_MULTISELECT_ADD_BUTTON_LABEL : 'Добавить'
+                }
+            },
             onInit : function(){},
             onStartSearch : function(tips,term){},
             onEndSearch : function(tips){},
@@ -333,6 +343,7 @@
             onChange : function(){},
             onCloseDropdownList:function(){},
             onOpenDropdownList:function(){},
+            onRequiredCheck:function(result){},
             onError : function(err){
                 throw err;
             },
@@ -350,13 +361,14 @@
             var term_block = jQuery(`<div class="oxDropdownTipsContainer${(settings.multiselect ? ' multiselect-on' : ' multiselect-off')}">
                                         <div class="oxDropdownTipsMultiselectContainer"></div>
                                         <div class="oxDropdownTipsInputContainer">
-                                            <input type="text" class="oxDropdownTipsInput" placeholder="${settings.termInputPlaceholder}" />
+                                            <input type="text" class="oxDropdownTipsInput" placeholder="${(settings.language[settings.locale].TERM_INPUT_PLACEHOLDER || 'TERM_INPUT_PLACEHOLDER')}" />
                                         </div>
                                         <div class="oxDropdownTipsDropdownOpener">
                                             <svg version="1.1" class="oxDropdownTipsDropdownOpenerIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 240.811 240.811" style="enable-background:new 0 0 240.811 240.811;" xml:space="preserve">
                                                 <path d="M220.088,57.667l-99.671,99.695L20.746,57.655c-4.752-4.752-12.439-4.752-17.191,0 c-4.74,4.752-4.74,12.451,0,17.203l108.261,108.297l0,0l0,0c4.74,4.752,12.439,4.752,17.179,0L237.256,74.859 c4.74-4.752,4.74-12.463,0-17.215C232.528,52.915,224.828,52.915,220.088,57.667z" fill="#999999"/>
                                             </svg>
                                         </div>
+                                        <div class="oxDropdownTipsMessages"></div>
                                     </div>`).insertAfter(origin_input[0]);
             var term_input = term_block.find('.oxDropdownTipsInput');
             var multiselect_wrapper = term_block.find('.oxDropdownTipsMultiselectContainer');
@@ -400,6 +412,7 @@
                         if(typeof settings.onOpenDropdownList == 'function')
                             settings.onOpenDropdownList(e,tips_wrapper[0]);
                     });
+                    term_block.find('.oxDropdownTipsMessages').html('');
                 });
 
                 term_input.on('focusout',function(e) {
@@ -417,18 +430,43 @@
 
                         term_input.data('hide_timer',hide_timer);
                     }
-                        
                 });
 
                 tips_wrapper.hide();
 
-                if(typeof settings.onInit == 'function'){
-
+                if(typeof settings.onInit == 'function')
                     settings.onInit();
-                }
 
                 if(settings.multiselect)
                     oxDrawMultiselect(origin_input);
+
+                if(settings.required){
+                    origin_input.addClass('required');
+                    origin_input.closest('form').on('submit',function(e) {
+                        if(origin_input.val() == ''){
+                            e.preventDefault();
+                            
+                            term_block.find('.oxDropdownTipsMessages').html(`<div class="oxDropdownTipsMessage oxDropdownTipsMessageError">${(settings.language[settings.locale].TERM_INPUT_REQUIRED_ERROR_MESSAGE || 'TERM_INPUT_REQUIRED_ERROR_MESSAGE')}</div>`);
+
+                            states.requiredCheck = false;
+
+                            if(typeof settings.onRequiredCheck == 'function')
+                                settings.onRequiredCheck(states.requiredCheck);
+
+                            return false;
+                        }else{
+                            states.requiredCheck = true;
+
+                            if(typeof settings.onRequiredCheck == 'function')
+                                settings.onRequiredCheck(states.requiredCheck);
+                        }
+                    });
+                }else{
+                    states.requiredCheck = true;
+
+                    if(typeof settings.onRequiredCheck == 'function')
+                        settings.onRequiredCheck(states.requiredCheck);
+                }
         });
  
         return this;

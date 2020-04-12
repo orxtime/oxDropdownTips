@@ -21,6 +21,8 @@ input.oxDropdownTipsInput:focus {
 .oxDropdownTipsWrapper {
     border: 1px solid #ddd;
     margin-top: -1px;
+    max-height: 181px;
+    overflow-y: auto;
 }
 a.oxDropdownTipsItem {
     display: block;
@@ -142,4 +144,27 @@ span.oxDropdownTipsMultiselectTagAddIcon {
 }
 .oxDropdownTipsMultiselectTagsContainer {
     padding-right: 25px;
+}
+.oxDropdownTipsMessageError {
+    font-size: 14px;
+    padding: 3px 10px;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background: #ffd0d0;
+    top: 100%;
+    border: 1px solid #ff9e9e;
+    color: #b52d2d;
+}
+.oxDropdownTipsMessageError:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #ff9e9e transparent;
+    position: absolute;
+    bottom: 100%;
+    right: 9px;
 }
